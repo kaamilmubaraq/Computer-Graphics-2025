@@ -1,0 +1,30 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src = "p5.js"></script>
+</head>
+<body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+        // Run only once, creates and the canvas and set the size
+        function setup(){
+            createCanvas(400,400);  // width, height
+            background(100,100,100); // RGB color
+        }
+        // Run continuously(loop), draws the shapes
+        function draw(){
+            //Draw line Line(x1,y1,x2,y2)
+            beginShape(LINES) //CAN ALSO BE POINTS, TRIANGLES, TRIANGLE_FAN, TRIANGLE_STRIP, QUADS, QUAD_STRIP
+                vertex(50,50);
+                vertex(350,350);
+                vertex(50,350);
+            endShape();
+            }
+    </script>
+</body>
+</html>

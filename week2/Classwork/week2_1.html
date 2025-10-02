@@ -1,0 +1,32 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src = "p5.js"></script>
+</head>
+<body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+        // Run only once, creates and the canvas and set the size
+        function setup(){
+            createCanvas(400,400);  // width, height
+            background(100,100,100); // RGB color
+        }
+        // Run continuously(loop), draws the shapes
+        function draw(){
+            //Draw line Line(x1,y1,x2,y2)
+  
+            //Draw circle circle(x,y,diameter)
+            circle(200,200,300)
+            //Draw rectangle rect(x,y,width,height) x,y will be the ordinate of left top
+            rect(150,150,100,100)
+            line(0,0,400,400)
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      function setup() {
+        createCanvas(400, 400);
+      }
+
+      function draw() {
+        background(245);
+
+        //sinwave
+
+        noFill();
+        strokeWeight(2);
+
+        stroke(255, 0, 0);
+        // Equal scale so x and y units match
+        const s = Math.min(width / (2 * Math.PI), height / 2); // scale factor
+        const cx = width / 2; // center x
+        const cy = height / 2; // center y
+
+        beginShape();
+        for (let x = -Math.PI; x <= Math.PI; x += 0.02) {
+          const y = Math.sin(x);
+          vertex(cx + s * x, cy - s * y);
+        }
+        endShape();
+
+        //cosewave
+        stroke(0, 0, 255);
+        beginShape();
+        for (let x = -Math.PI; x <= Math.PI; x += 0.02) {
+          const y = Math.cos(x);
+          vertex(cx + s * x, cy - s * y);
+        }
+        endShape();
+        //tanwave
+        stroke(0, 150, 0);
+        beginShape();
+        const a = -Math.PI / 2 + 0.3,
+          b = Math.PI / 2 - 0.3;
+        for (let x = a; x <= b; x += 0.02) {
+          const y = Math.tan(x);
+          vertex(cx + s * x, cy - s * y);
+        }
+        endShape();
+      }
+    </script>
+  </body>
+</html>
