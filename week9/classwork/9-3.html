@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 9-3</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      let img;
+
+      function preload() {
+        // Make sure you have a file named 'texture.jpg' in the same folder
+        img = loadImage('texture.jpg');
+      }
+
+      function setup() {
+        createCanvas(600, 400, WEBGL);
+        textureMode(NORMAL);
+        noStroke();
+      }
+
+      function draw() {
+        background(200);
+        
+        // Rotate the whole scene so we can see the 3D effect
+        rotateY(frameCount * 0.02);
+        rotateX(frameCount * 0.01);
+
+        // Apply the texture ONCE here. 
+        // It will be used for all shapes drawn afterwards.
+        texture(img);
+
+        // --- Object 1: Cube (Box) ---
+        push();
+        translate(-150, 0, 0); // Move to the left
+        box(100);              // Draw a cube of size 100
+        pop();
+
+        // --- Object 2: Sphere ---
+        push();
+        translate(150, 0, 0);  // Move to the right
+        sphere(70);            // Draw a sphere of radius 70
+        pop();
+      }
+    </script>
+  </body>
+</html>

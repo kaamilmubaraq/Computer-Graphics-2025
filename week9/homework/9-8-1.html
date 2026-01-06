@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 9-7 (1): 3 Textured Cubes</title>
+  <script src="../../p5.js"></script>
+</head>
+<body>
+  <script>
+    let imgCube1, imgCube2, imgCube3;
+
+    function preload() {
+
+      imgCube1 = loadImage("brick3.jpg");
+      imgCube2 = loadImage("brick4.jpg");
+      imgCube3 = loadImage("brick5.jpg");
+    }
+
+    function setup() {
+      createCanvas(600, 400, WEBGL);
+      noStroke(); 
+    }
+
+    function draw() {
+      background(200); // Grey background
+      orbitControl();  
+      ambientLight(200); 
+
+      // Cube 1 (Left) 
+      push();
+      translate(-150, 0, 0); // Move to the left
+      texture(imgCube1);     // Apply first texture
+      box(100);              // Draw cube
+      pop();
+
+      //  Cube 2 (Center) 
+      push();
+      texture(imgCube2);     // Apply second texture
+      box(100);              // Draw cube
+      pop();
+
+      //  Cube 3 (Right) 
+      push();
+      translate(150, 0, 0);  // Move to the right
+      texture(imgCube3);     // Apply third texture
+      box(100);              // Draw cube
+      pop();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+    /// USED CODE FROM SAMPLE 6-3 TO VISUALIZE THE STL MODEL
+
+
+      let mesh; // STLモデルデータを格納する変数
+
+      // --- モデルの読み込み ---
+      // preload()：プログラム実行前に一度だけ呼ばれる
+      function preload() {
+        // loadModel(): 3Dモデルを読み込む関数
+        //   ・OBJ形式、STL形式をサポート
+        //   ・normalize:true でモデルを標準サイズ（1.0）にスケーリング
+        //   ・fileType:'.stl' で、拡張子が無い場合でもSTL形式として明示
+        mesh = loadModel("6-5.stl", {
+          normalize: true,
+          fileType: ".stl",
+        });
+      }
+
+      function setup() {
+        createCanvas(600, 400, WEBGL);
+        camera(800, 0, 0, 0, 0, 0, 0, -1, 0);
+        noStroke();
+      }
+
+      function draw() {
+        background(255);
+        orbitControl();
+
+        rotateY(frameCount * 0.01);
+
+        // normalMaterial(): 各面の法線方向をもとに自動的に色を付ける
+        normalMaterial();
+
+        // 読み込んだSTLモデルを描画
+        model(mesh);
+      }
+    </script>
+  </body>
+</html>

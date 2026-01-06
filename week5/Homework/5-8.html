@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      function setup() {
+        createCanvas(500, 500, WEBGL);
+        perspective();
+        camera(800, 0, 0, 0, 0, 0, 0, -1, 0);
+      }
+
+      let k = 0;
+      let angle = 0; // angle
+
+      function keyPressed() {
+        if (key === "d" || key === "D") {
+          k += 100;
+        }
+      }
+
+      function draw() {
+        background(0);
+        orbitControl();
+
+        // update angle over time
+        angle += 0.01;
+
+        // ワールド座標軸
+        push();
+        strokeWeight(2);
+        stroke(255, 0, 0);
+        line(0, 0, 0, 200, 0, 0); // X red
+        stroke(0, 255, 0);
+        line(0, 0, 0, 0, 200, 0); // Y green
+        stroke(0, 0, 255);
+        line(0, 0, 0, 0, 0, 200); // Z blue
+        pop();
+
+        // Rocket
+        push();
+        rotateY(angle);
+
+        noFill();
+        stroke(255, 255, 0);
+        strokeWeight(1.5);
+
+        const r = 100;
+        const h = 200;
+
+        // 1段目
+        push();
+        translate(0, -h / 2 - k, 0);
+        cylinder(r, h);
+        pop();
+
+        //WINGS
+        const finOut = 140;
+        const finDown = 90;
+        for (let i = 0; i < 4; i++) {
+          push();
+          rotateY((PI / 2) * i);
+          translate(r, -h / 2 - k, 0);
+          triangle(0, 0, finOut, -finDown * 0.3, 0, -finDown);
+          pop();
+        }
+
+        // 2段目
+        push();
+        translate(0, h / 2, 0);
+        cylinder(r, h);
+        pop();
+
+        // 3段目
+        push();
+        translate(0, h * 1.5, 0);
+        cone(r, h);
+        pop();
+
+        pop(); // end rocket
+      }
+    </script>
+  </body>
+</html>

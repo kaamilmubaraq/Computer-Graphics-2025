@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      function setup() {
+        createCanvas(800, 600, WEBGL);
+      }
+
+      function draw() {
+        background(20);
+
+        // Camera settings
+        camera(0, -300, 600, 0, 0, 0, 0, 1, 0);
+
+        // Ambient light (dim)
+        ambientLight(30);
+
+        // Spotlight 1: Red - shines on the cube
+        let light1X = -200;
+        let light1Y = -200;
+        let light1Z = 0;
+        let dirX1 = -200;
+        let dirY1 = 0;
+        let dirZ1 = 0;
+        spotLight(
+          255,
+          0,
+          0,
+          light1X,
+          light1Y,
+          light1Z,
+          dirX1 - light1X,
+          dirY1 - light1Y,
+          dirZ1 - light1Z,
+          PI / 6,
+          10
+        );
+
+        // Spotlight 2: Green - shines on the sphere
+        let light2X = 0;
+        let light2Y = -200;
+        let light2Z = 50;
+        let dirX2 = 0;
+        let dirY2 = 0;
+        let dirZ2 = 0;
+        spotLight(
+          0,
+          255,
+          0,
+          light2X,
+          light2Y,
+          light2Z,
+          dirX2 - light2X,
+          dirY2 - light2Y,
+          dirZ2 - light2Z,
+          PI / 6,
+          10
+        );
+
+        // Spotlight 3: Blue - shines on the cone
+        let light3X = 200;
+        let light3Y = -200;
+        let light3Z = 0;
+        let dirX3 = 200;
+        let dirY3 = 0;
+        let dirZ3 = 0;
+        spotLight(
+          0,
+          0,
+          255,
+          light3X,
+          light3Y,
+          light3Z,
+          dirX3 - light3X,
+          dirY3 - light3Y,
+          dirZ3 - light3Z,
+          PI / 6,
+          10
+        );
+
+        // Draw the floor (plane) - smooth appearance
+        push();
+        translate(0, 100, 0);
+        rotateX(PI / 2);
+        ambientMaterial(100);
+        specularMaterial(80);
+        shininess(10);
+        noStroke();
+        plane(800, 800);
+        pop();
+
+        // Object 1: Cube (left)
+        push();
+        translate(-200, 0, 0);
+        ambientMaterial(150);
+        specularMaterial(100);
+        shininess(20);
+        noStroke();
+        box(80);
+        pop();
+
+        // Object 2: Sphere (center) - smooth appearance
+        push();
+        translate(0, 0, 0);
+        ambientMaterial(150);
+        specularMaterial(100);
+        shininess(30);
+        noStroke();
+        sphere(60, 64, 64); // Increase detail (high resolution)
+        pop();
+
+        // Object 3: Cone (right) - adjusted to point up
+        push();
+        translate(200, 50, 0); // Adjust Y position
+        rotateX(PI); // Rotate 180 degrees to point upwards
+        ambientMaterial(150);
+        specularMaterial(100);
+        shininess(20);
+        noStroke();
+        cone(60, 100, 64); // Increase detail
+        pop();
+
+        // Markers for light source positions (small spheres)
+        // Marker 1 (Red)
+        push();
+        translate(light1X, light1Y, light1Z);
+        noLights();
+        emissiveMaterial(255, 0, 0);
+        noStroke();
+        sphere(15);
+        pop();
+
+        // Marker 2 (Green)
+        push();
+        translate(light2X, light2Y, light2Z);
+        noLights();
+        emissiveMaterial(0, 255, 0);
+        noStroke();
+        sphere(15);
+        pop();
+
+        // Marker 3 (Blue)
+        push();
+        translate(light3X, light3Y, light3Z);
+        noLights();
+        emissiveMaterial(0, 0, 255);
+        noStroke();
+        sphere(15);
+        pop();
+      }
+    </script>
+  </body>
+</html>

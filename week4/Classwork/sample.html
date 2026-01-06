@@ -1,0 +1,74 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+      function setup() {
+        // --- 3D描画の準備 ---
+        createCanvas(500, 500, WEBGL); // WEBGLモードで3D描画を有効化
+
+        // --- 射影変換（Projection）設定 ---
+        perspective(); // 透視投影：遠近感をつける
+        //ortho();      // 平行投影：遠近感をつけない
+
+        // --- ビュー変換（View）設定 ---
+        // camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)
+        // 視点(800,0,0)から原点(0,0,0)を見る。上方向を(0,-1,0)とする。
+        camera(800, 0, 0, 0, 0, 0, 0, -1, 0);
+      }
+
+      function draw() {
+        // --- 背景のクリア ---
+        background(0);
+
+        // --- 視点操作 ---
+        // マウス操作で視点（カメラ位置）を回転・ズーム可能にする
+        orbitControl();
+
+        // ワールド座標系の描画
+        push();
+        strokeWeight(2);
+        stroke(255, 0, 0);
+        line(0, 0, 0, 200, 0, 0); // X軸（赤）
+        stroke(0, 255, 0);
+        line(0, 0, 0, 0, 200, 0); // Y軸（緑）
+        stroke(0, 0, 255);
+        line(0, 0, 0, 0, 0, 200); // Z軸（青）
+        pop();
+
+        // --- モデル変換（Model変換） ---
+        // ローカル座標系で立方体を定義
+        push();
+        noFill();
+        stroke("yellow");
+
+        // QUAD_STRIP: 四角形の帯を連続して描く
+        beginShape(QUAD_STRIP);
+        vertex(0.0, 0.0, 0.0); // p0
+        vertex(0.0, 100.0, 0.0); // p1
+
+        vertex(100.0, 0.0, 0.0); // p2
+        vertex(100.0, 100.0, 0.0); // p3
+
+        vertex(100.0, 0.0, 100.0); // p4
+        vertex(100.0, 100.0, 100.0); // p5
+
+        vertex(0.0, 0.0, 100.0); // p6
+        vertex(0.0, 100.0, 100.0); // p7
+
+        vertex(0.0, 0.0, 0.0); // p0
+        vertex(0.0, 100.0, 0.0); // p1
+        endShape();
+        pop();
+      }
+    </script>
+  </body>
+</html>

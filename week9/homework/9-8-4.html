@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 9-7 (4): House in Space</title>
+  <script src="../../p5.js"></script>
+</head>
+<body>
+  <script>
+    let imgGround, imgWalls, imgRoof, imgDoor, imgSky;
+
+    function preload() {
+      imgGround = loadImage("grass.jpg");
+      imgWalls  = loadImage("brick3.jpg");
+      imgRoof   = loadImage("brick5.jpg");
+      imgDoor   = loadImage("brick4.jpg");
+      imgSky    = loadImage("starsky.jpg"); 
+    }
+
+    function setup() {
+      createCanvas(600, 400, WEBGL);
+      noStroke();
+      textureMode(NORMAL);
+      
+      camera(0, -300, 500, 0, -50, 0, 0, 1, 0);
+    }
+
+    function draw() {
+      
+      orbitControl();
+      
+      ambientLight(150);
+      directionalLight(255, 255, 255, 0.5, 1, -0.5);
+
+      // THE SPACE SKY 
+      push();
+      noLights(); 
+      texture(imgSky);
+      // A huge sphere that surrounds everything
+      sphere(2000); 
+      pop();
+
+      // The Ground
+      push();
+      translate(0, 50, 0);
+      rotateX(PI / 2);
+      texture(imgGround);
+      plane(1000, 1000); 
+      pop();
+
+      // The House Walls
+      push();
+      translate(0, 0, 0);
+      texture(imgWalls);
+      box(100);
+      pop();
+
+      // The Roof
+      push();
+      texture(imgRoof);
+      beginShape(TRIANGLES);
+      // Front Face
+      vertex(-50, -50,  50, 0, 1);
+      vertex( 50, -50,  50, 1, 1);
+      vertex(  0, -150,  0, 0.5, 0);
+      // Right Face
+      vertex( 50, -50,  50, 0, 1);
+      vertex( 50, -50, -50, 1, 1);
+      vertex(  0, -150,  0, 0.5, 0);
+      // Back Face
+      vertex( 50, -50, -50, 0, 1);
+      vertex(-50, -50, -50, 1, 1);
+      vertex(  0, -150,  0, 0.5, 0);
+      // Left Face
+      vertex(-50, -50, -50, 0, 1);
+      vertex(-50, -50,  50, 1, 1);
+      vertex(  0, -150,  0, 0.5, 0);
+      endShape();
+      pop();
+
+      // The Door
+      push();
+      translate(0, 20, 51); 
+      texture(imgDoor);
+      plane(30, 60);
+      pop();
+
+      // The Chimney
+      push();
+      translate(25, -100, 0);
+      texture(imgDoor);
+      box(20, 60, 20);
+      pop();
+    }
+  </script>
+</body>
+</html>

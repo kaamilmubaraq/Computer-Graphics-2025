@@ -1,0 +1,52 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+      let valueR = 0;
+      let valueG = 0;
+      let valueB = 0;
+
+      function setup() {
+        createCanvas(300, 300);
+      }
+
+      function draw() {
+        background(200);
+
+        fill(valueR, valueG, valueB);
+        rect(50, 50, 200);
+      }
+
+      function keyPressed() {
+        if (key == "r") {
+          valueR = 255;
+          valueG = 0;
+          valueB = 0;
+        } else if (key == "g") {
+          valueR = 0;
+          valueG = 255;
+          valueB = 0;
+        } else if (key == "b") {
+          valueR = 0;
+          valueG = 0;
+          valueB = 255;
+        } else if (keyCode == ENTER) {
+          valueB = random(0, 255);
+          valueG = random(0, 255);
+          valueR = random(0, 255);
+        } else {
+          value = 0;
+        }
+      }
+    </script>
+  </body>
+</html>

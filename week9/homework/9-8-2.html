@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 9-7 (2): Cube on Ground</title>
+  <script src="../../p5.js"></script>
+</head>
+<body>
+  <script>
+    let imgGround, imgCube;
+
+    function preload() {
+      imgGround = loadImage("grass.jpg");
+      imgCube = loadImage("brick5.jpg");
+    }
+
+    function setup() {
+      createCanvas(600, 400, WEBGL);
+      noStroke();
+
+  camera(0, -300, 600, 0, 0, 0, 0, 1, 0);
+    }
+
+    function draw() {
+      background(135, 206, 235); // Sky blue background
+      orbitControl();
+      ambientLight(150); // General ambient light
+      directionalLight(255, 255, 255, 0.5, 1, -0.5); // Sunlight from top-right
+
+      // Ground Plane 
+      push();
+      rotateX(PI / 2); // Rotate 90 degrees to make it horizontal
+      texture(imgGround);
+      plane(1500, 1500); // A large plane
+      pop();
+
+      // Cube
+      push();
+
+      translate(0, -50, 0); 
+      texture(imgCube);
+      box(100);
+      pop();
+    }
+  </script>
+</body>
+</html>

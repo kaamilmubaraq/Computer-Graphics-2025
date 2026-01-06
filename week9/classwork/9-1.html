@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      let img; // 読み込む画像を保存する変数
+
+function preload() {
+  // 画像ファイルを読み込む
+  img = loadImage('texture.jpg');
+}
+
+function setup() {
+  createCanvas(400, 400, WEBGL); 
+  textureMode(NORMAL); // テクスチャ座標を0?1の正規化モードに設定
+}
+
+function draw() {
+  background(200);
+  noStroke();
+  rotateY(frameCount * 0.02); // Y軸周りに回転
+  
+  texture(img); // テクスチャを設定
+
+  plane(200); // 平面の描画（画像貼付）
+}
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task 9-7 (3): Space Scene</title>
+  <script src="../../p5.js"></script>
+</head>
+<body>
+  <script>
+    let imgSky, imgPlanet, imgSatellite;
+
+    function preload() {
+      imgSky = loadImage("starsky.jpg");
+      imgPlanet = loadImage("earth.jpg");
+      imgSatellite = loadImage("moon.jpg");
+    }
+
+    function setup() {
+      createCanvas(600, 400, WEBGL);
+      noStroke();
+    }
+
+    function draw() {
+      orbitControl();
+      
+      // Lighting for space
+      ambientLight(50); // Dim ambient light
+      // A bright point light to represent the sun coming from the right
+      pointLight(255, 255, 255, 400, 0, 200); 
+
+      // Starry Sky Background
+      push();
+      // No lights on the sky itself so it looks like glowing stars
+      noLights(); 
+      texture(imgSky);
+      // Draw a huge sphere 
+      sphere(2000); 
+      pop();
+
+      //  Central Planet 
+      push();
+      // Rotate the planet on its Y-axis
+      rotateY(frameCount * 0.005); 
+      texture(imgPlanet);
+      sphere(100);
+      pop();
+
+      // Orbiting Satellite 
+      push();
+      // 1. Rotate around the center 
+      rotateY(frameCount * 0.02); 
+      // 2. Move out to the orbital radius
+      translate(250, 0, 0); 
+      // 3. Rotate the satellite itself
+      rotateY(frameCount * 0.05); 
+      texture(imgSatellite);
+      sphere(30);
+      pop();
+    }
+  </script>
+</body>
+</html>

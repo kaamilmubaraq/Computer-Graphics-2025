@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 9-3</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      let textures = []; // Array to store the six textures
+
+      function preload() {
+        for (let i = 1; i <= 6; i++) {
+          textures[i] = loadImage(i + ".png");
+        }
+      }
+
+      function setup() {
+        createCanvas(500, 500, WEBGL);
+        noStroke();
+      }
+
+      function draw() {
+        background(200);
+
+        // Rotate the whole die so we can see
+        rotateX(frameCount * 0.01);
+        rotateY(frameCount * 0.01);
+        rotateZ(frameCount * 0.005);
+
+        let size = 150; // Size of the die
+        let dist = size / 2; // Distance from center to face
+
+        // Face 1 (Front)
+        push();
+        translate(0, 0, dist);
+        texture(textures[1]);
+        plane(size);
+        pop();
+
+        //  Face 6 (Back) [Opposite to 1]
+        push();
+        translate(0, 0, -dist);
+        rotateY(PI); // Rotate 180 deg to face outwards
+        texture(textures[6]);
+        plane(size);
+        pop();
+
+        //Face 2 (Top)
+        push();
+        translate(0, -dist, 0);
+        rotateX(PI / 2); // Rotate 90 deg to face up
+        texture(textures[2]);
+        plane(size);
+        pop();
+
+        // Face 5 (Bottom) [Opposite to 2]
+        push();
+        translate(0, dist, 0);
+        rotateX(-PI / 2); // Rotate -90 deg to face down
+        texture(textures[5]);
+        plane(size);
+        pop();
+
+        // Face 3 (Left)
+        push();
+        translate(-dist, 0, 0);
+        rotateY(-PI / 2); // Rotate -90 deg to face left
+        texture(textures[3]);
+        plane(size);
+        pop();
+
+        // Face 4 (Right) [Opposite to 3]
+        push();
+        translate(dist, 0, 0);
+        rotateY(PI / 2); // Rotate 90 deg to face right
+        texture(textures[4]);
+        plane(size);
+        pop();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+      function setup() {
+        createCanvas(500, 500, WEBGL);
+        perspective();
+        camera(400, 400, 400, 0, 0, 0, 0, -1, 0);
+      }
+
+      function draw() {
+        background(100);
+        orbitControl();
+
+        drawAxis();
+
+        push();
+        noStroke();
+        fill(160,200,160);
+        rotateX(HALF_PI);
+        plane(2000,2000);
+        pop();
+
+        const length = 100;
+        const height = 80;
+        const width = 60;
+
+        push();
+        stroke(0);
+        fill(210, 170, 140);
+        translate(0,width/2,0);
+        box(length, width, height);
+        pop();
+
+        push();
+        stroke(0);
+        fill(180, 40, 40);
+        translate(0, width, 0);    
+        rotateX(PI);
+        drawPyramid(length * 1.2, height * 1.2, 60);  
+        pop();
+
+        push();
+        stroke(0);
+        fill(190);
+        translate(length * 0.25, 100 , height *0.25);
+        cylinder(10, 45, 100);  
+        pop();
+
+      }
+
+        function drawPyramid(w, d, h) {
+        beginShape(TRIANGLES);
+
+        // front (+z)
+        vertex(-w/2, 0,  d/2);
+        vertex( w/2, 0,  d/2);
+        vertex( 0,  -h,  0);
+
+        // right (+x)
+        vertex( w/2, 0,  d/2);
+        vertex( w/2, 0, -d/2);
+        vertex( 0,  -h,  0);
+
+        // back (-z)
+        vertex( w/2, 0, -d/2);
+        vertex(-w/2, 0, -d/2);
+        vertex( 0,  -h,  0);
+
+        // left (-x)
+        vertex(-w/2, 0, -d/2);
+        vertex(-w/2, 0,  d/2);
+        vertex( 0,  -h,  0);
+
+        endShape();
+      }
+
+      // ワールド座標系の描画
+      function drawAxis() {
+        push();
+        strokeWeight(2);
+        stroke(255, 0, 0);
+        line(0, 0, 0, 200, 0, 0); // X軸（赤）
+        stroke(0, 255, 0);
+        line(0, 0, 0, 0, 200, 0); // Y軸（緑）
+        stroke(0, 0, 255);
+        line(0, 0, 0, 0, 0, 200); // Z軸（青）
+        pop();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+      // グローバル変数の定義
+      let angle = 0; // 回転角（度）
+
+      function setup() {
+        createCanvas(500, 500, WEBGL);
+        perspective();
+        camera(800, 0, 0, 0, 0, 0, 0, -1, 0);
+        setAttributes("depth", true);
+        angleMode(DEGREES); // 角度を度数法に変更
+      }
+
+      function draw() {
+        background(255);
+        orbitControl();
+
+        // 回転角の更新
+        angle += 1; // 1フレームごとに1度加算
+        if (angle >= 360) angle = 0; //360度以上でリセット
+
+        noStroke();
+        push();
+        rotateY(angle); // Y軸周りの回転
+        drawPlanes();
+        pop();
+      }
+
+      function drawPlanes() {
+        //四角形その１（緑）
+        push();
+        fill(0, 255, 0);
+        beginShape();
+        vertex(0, -100, 0);
+        vertex(-100, -100, 120);
+        vertex(-100, 100, 120);
+        vertex(0, 100, 0);
+        endShape(CLOSE);
+        pop();
+        //四角形その２（赤）
+        push();
+        fill(255, 0, 0);
+        beginShape();
+        vertex(0, -100, 0);
+        vertex(100, -100, 120);
+        vertex(100, 100, 120);
+        vertex(0, 100, 0);
+        endShape(CLOSE);
+        pop();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 9-3</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+let img1, img2;
+function preload() {
+// 画像を読み込む
+img1 = loadImage("texture1.jpg");
+img2 = loadImage("texture2.jpg");
+}
+function setup() {
+createCanvas(400, 400, WEBGL);
+}
+function draw() {
+background(200);
+// 1 つ目の物体(立方体)
+push();
+translate(-100, 0, 0); // 左に配置
+texture(img1); // 画像 1 を貼付
+box(100);
+pop();
+// 2 つ目の物体(球体)
+push();
+translate(100, 0, 0); // 右に配置
+texture(img2); // 画像 2 を貼付
+sphere(60);
+pop();
+}
+    </script>
+  </body>
+</html>

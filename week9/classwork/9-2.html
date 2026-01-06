@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+let img;
+
+function preload() {
+  img = loadImage('texture.jpg'); // 任意の画像ファイル
+}
+
+function setup() {
+  createCanvas(400, 400, WEBGL);
+  debugMode();  //red=axis, green=yaxis, blue=zaxis
+}
+
+function draw() {
+  background(220);
+
+  // 左側: IMAGEモード
+  push();
+    translate(-80, 0, 0);
+    textureMode(IMAGE);
+    texture(img);
+    beginShape();
+      vertex(-50, -50, 0,   0,   0);  // 左上
+      vertex( 50, -50, 0, 200,   0);  // 右上
+      vertex( 50,  50, 0, 200, 200);  // 右下
+      vertex(-50,  50, 0,   0, 200);  // 左下
+    endShape(CLOSE);
+  pop();
+
+  // 右側: NORMALモード
+  push();
+    translate(80, 0, 0);
+    textureMode(NORMAL);
+    texture(img);
+    beginShape();
+      vertex(-50, -50, 0, 0, 0);   // 左上
+      vertex( 50, -50, 0, 1, 0);   // 右上
+      vertex( 50,  50, 0, 1, 1);   // 右下
+      vertex(-50,  50, 0, 0, 1);   // 左下
+    endShape(CLOSE);
+  pop();
+}
+    </script>
+  </body>
+</html>

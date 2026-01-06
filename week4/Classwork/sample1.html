@@ -1,0 +1,83 @@
+<!-- Read Html in the browser -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <!-- Load the library -->
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <!-- Thr picture drawn by the user -->
+    <script>
+      function setup() {
+        createCanvas(500, 500, WEBGL);
+        perspective();
+        camera(800, 0, 0, 0, 0, 0, 0, -1, 0);
+      }
+
+      function draw() {
+        background(0);
+        orbitControl();
+
+        drawAxis();
+
+        noFill();
+        stroke("yellow");
+        strokeWeight(1.5);
+
+        const r = 150;
+        const dLong = (15 * PI) / 180;
+        const dLat = (15 * PI) / 180;
+
+        for (let lambda = 0; lambda <= TWO_PI; lambda += dLong) {
+        push();
+        rotateY(lambda);      // spin around Y to get different meridian planes
+        rotateZ(HALF_PI);     // turn XZ circle -> YZ circle
+        drawCircle(r);
+        pop();
+        }
+
+        for(let phi = -PI/2; phi <= PI/2; phi += dLat){
+            const y = r * sin(phi);
+            const R = r * cos(phi);
+
+            push();
+            translate(0,y,0);
+            drawCircle(R);
+            pop();
+            
+        }
+
+
+
+      }
+
+      // ワールド座標系の描画
+      function drawAxis() {
+        push();
+        strokeWeight(2);
+        stroke(255, 0, 0);
+        line(0, 0, 0, 200, 0, 0); // X軸（赤）
+        stroke(0, 255, 0);
+        line(0, 0, 0, 0, 200, 0); // Y軸（緑）
+        stroke(0, 0, 255);
+        line(0, 0, 0, 0, 0, 200); // Z軸（青）
+        pop();
+      }
+
+      function drawCircle(r) {
+        const segments = 72;
+        beginShape();
+        for (let i = 0; i < segments; i++) {
+          const theta = (TWO_PI * i) / segments;
+          const x = r * cos(theta);
+          const z = r * sin(theta);
+          vertex(x, 0, z);
+        }
+        endShape(CLOSE);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+let mode = 1;
+let shininessValue = 20;  // Initial shininess value
+
+
+function setup() {
+  createCanvas(600, 400, WEBGL);
+  noStroke();
+}
+
+
+function draw() {
+  background(20);
+  
+  noLights();           // Reset lights
+  shininess(1);         // Reset to default
+  specularMaterial(0);  // Reset to default
+
+
+  // --- Ambient light only ---  
+  if (mode == 1) {
+    ambientLight(80);
+    ambientMaterial(0, 100, 255);
+  }
+  // --- Diffuse reflection (Matte look) ---  
+  if (mode == 2) {
+    ambientLight(80);
+    directionalLight(255, 255, 255, -1, -1, -1);
+    ambientMaterial(0, 100, 255);
+  }
+  // --- Specular reflection (Shiny look) ---  
+  if (mode == 3) {
+    ambientLight(80);
+    directionalLight(255, 255, 255, -1, -1, -1);
+    specularMaterial(0, 100, 255);
+    shininess(shininessValue);  // Use the dynamic value
+  }
+  sphere(120);
+  
+  // Display the shininess value on screen
+  fill(255);
+  text('Shininess: ' + shininessValue, -280, -180);
+}
+
+
+function keyPressed() {
+  if (key === '1') mode = 1;
+  if (key === '2') mode = 2;
+  if (key === '3') mode = 3;
+  
+  // Press 'a' to decrease shininess
+  if (key === 'a' || key === 'A') {
+    shininessValue = max(1, shininessValue - 5);
+  }
+  
+  // Press 's' to increase shininess
+  if (key === 's' || key === 'S') {
+    shininessValue = min(200, shininessValue + 5);
+  }
+}
+
+    </script>
+  </body>
+</html>

@@ -27,7 +27,7 @@
 
         beginShape(POINTS);
         for (let a = 0; a < TWO_PI; a += step) {
-          const x = cx + r * Math.cos(a);
+          const x = cx + r * Math.cos(a);   //in this case r will pixl per unit ie 50 pixel now
           const y = cy + r * Math.sin(a);
           vertex(x, y);
         }
