@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Homework 10-6: Space Yard Explorer</title>
+    <script src="../../p5.js"></script>
+    <style>
+      body {
+        margin: 0;
+        background: #111;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      /*
+=========================================================
+Homework 10-6: Space Yard Explorer
+Theme: A small “space yard” with a robot exploring a house,
+rocks, and an animated UFO.
+=========================================================
+
+[Requirement → Where it is implemented in this code]
+
+(1) 複数のオブジェクト (>=3 objects)
+  - Sky sphere:        drawSky()
+  - Ground plane:      drawGround()
+  - House + roof/door: drawHouse()
+  - Robot:             drawRobot()
+  - Rocks (many):      rocks[] + drawRocks()
+  - UFO:               drawUFO()
+
+(2) 光の表現 (lighting)
+  - Base lighting: ambientLight(), directionalLight(), pointLight() in draw()
+  - Flashlight: spotLight() attached to robot in draw() (toggle with F)
+  - UFO light: moving pointLight() in drawUFO()
+
+(3) テクスチャマッピング (texture mapping)
+  - Texture loading: preload() with loadImage()
+  - Ground texture:  texture(imgGround) in drawGround()
+  - House textures:  texture(imgWalls/imgRoof/imgDoor) in drawHouse()
+  - Sky texture:     texture(imgSky) in drawSky()
+  - Robot textures:  texture(...) in drawRobot()
+
+(4) 視点の操作 (viewpoint control)
+  - Mouse viewpoint control: orbitControl() in draw()
+  - Initial camera setting:  camera(...) in setup()
+
+(5) アニメーション (animation)
+  - UFO orbit + floating: drawUFO() (uses frameCount)
+  - Robot limb swinging:  drawRobot() with a = sin(robot.walkPhase)
+  - Door opening motion:  drawHouse() with lerp(doorOpenValue,...)
+  - Jump motion:          updateRobot() (gravity + yVel)
+
+(6) オブジェクトの操作 (keyboard control)
+  - Robot move/rotate: updateRobot() using arrow keys
+  - Jump:              keyPressed() with J
+  - Door open/close:   keyPressed() with O
+  - Flashlight on/off: keyPressed() with F
+  - Reset robot:       keyPressed() with R
+
+
+
+
+
+  [Controls Summary]
+
+  Mouse: orbitControl() (rotate/zoom/pan viewpoint)
+  Arrow keys: move forward/back + rotate left/right
+  J: jump
+  O: open/close door
+  F: toggle flashlight
+  R: reset robot position
+*/
+
+      // Image variables
+      let imgGround, imgWalls, imgRoof, imgDoor, imgSky;
+
+      // Game constants
+      const GROUND_SIZE = 1000;
+      const WORLD_HALF = 450;
+      const GROUND_Y = 50;
+      const GRAVITY = 0.9;
+
+      // Robot position and animation variables
+      let robot = {
+        x: -150,
+        z: 100,
+        heading: 0,
+        y: GROUND_Y,
+        yVel: 0,
+        walkPhase: 0,
+      };
+
+      // Door animation variables
+      let doorOpenTarget = 0;
+      let doorOpenValue = 0;
+
+      // Arrays and flags
+      let rocks = [];
+      let flashlightOn = true;
+
+      function preload() {
+        // Load all textures
+        imgGround = loadImage("grass.jpg");
+        imgWalls = loadImage("brick3.jpg");
+        imgRoof = loadImage("brick5.jpg");
+        imgDoor = loadImage("brick4.jpg");
+        imgSky = loadImage("starsky.jpg");
+      }
+
+      function setup() {
+        createCanvas(900, 600, WEBGL);
+
+        noStroke();
+        textureMode(NORMAL);
+
+        // Set initial camera view
+        camera(0, -260, 520, 0, -70, 0, 0, 1, 0);
+
+        // Generate random rocks scattered around
+        for (let i = 0; i < 16; i++) {
+          rocks.push({
+            x: random(-WORLD_HALF + 60, WORLD_HALF - 60),
+            z: random(-WORLD_HALF + 60, WORLD_HALF - 60),
+            s: random(20, 50),
+            rot: random(TWO_PI),
+          });
+        }
+      }
+
+      function draw() {
+        background(10);
+
+        // Allow mouse to move camera
+        orbitControl();
+
+        // Setup scene lighting
+        ambientLight(45);
+        directionalLight(150, 150, 150, 0.4, 1, -0.4);
+        pointLight(140, 110, 90, 250, -200, 250);
+
+        // Handle flashlight logic
+        if (flashlightOn) {
+          // Calculate where the robot is facing
+          let fx = sin(robot.heading);
+          let fz = cos(robot.heading);
+
+          // Place spotlight slightly above the robot
+          spotLight(
+            255,
+            245,
+            220,
+            robot.x,
+            GROUND_Y - 80,
+            robot.z,
+            fx,
+            0.0,
+            fz,
+            PI / 7,
+            30
+          );
+        }
+
+        // Render functions
+        drawSky();
+        drawGround();
+        drawHouse();
+        drawRocks();
+        drawUFO();
+        updateRobot();
+        drawRobot();
+      }
+
+      // Draw the sky background
+      function drawSky() {
+        push();
+        noLights();
+        texture(imgSky);
+        sphere(2200);
+        pop();
+      }
+
+      // Draw the ground plane
+      function drawGround() {
+        push();
+        translate(0, GROUND_Y, 0);
+        rotateX(PI / 2);
+        texture(imgGround);
+        plane(GROUND_SIZE, GROUND_SIZE);
+        pop();
+      }
+
+      // Draw house with animated door
+      function drawHouse() {
+        // Door animation interpolation
+        doorOpenValue = lerp(doorOpenValue, doorOpenTarget, 0.08);
+
+        // Main house body
+        push();
+        translate(0, 0, 0);
+        texture(imgWalls);
+        box(100);
+        pop();
+
+        // Roof shape
+        push();
+        texture(imgRoof);
+        beginShape(TRIANGLES);
+        // Front face
+        vertex(-50, -50, 50, 0, 1);
+        vertex(50, -50, 50, 1, 1);
+        vertex(0, -150, 0, 0.5, 0);
+        // Right face
+        vertex(50, -50, 50, 0, 1);
+        vertex(50, -50, -50, 1, 1);
+        vertex(0, -150, 0, 0.5, 0);
+        // Back face
+        vertex(50, -50, -50, 0, 1);
+        vertex(-50, -50, -50, 1, 1);
+        vertex(0, -150, 0, 0.5, 0);
+        // Left face
+        vertex(-50, -50, -50, 0, 1);
+        vertex(-50, -50, 50, 1, 1);
+        vertex(0, -150, 0, 0.5, 0);
+        endShape();
+        pop();
+
+        // Draw the door
+        push();
+        translate(0, 20, 51); // Position door slightly in front
+
+        let doorW = 30;
+        let doorH = 60;
+
+        // Calculate rotation based on open value
+        let ang = doorOpenValue * (PI / 2.4);
+
+        // Rotate around hinge
+        translate(-doorW / 2, 0, 0);
+        rotateY(-ang);
+        translate(doorW / 2, 0, 0);
+
+        texture(imgDoor);
+        plane(doorW, doorH);
+        pop();
+
+        // Chimney
+        push();
+        translate(25, -100, 0);
+        texture(imgDoor);
+        box(20, 60, 20);
+        pop();
+      }
+
+      // Draw all rocks from the array
+      function drawRocks() {
+        for (let r of rocks) {
+          push();
+          translate(r.x, GROUND_Y - r.s / 2, r.z);
+          rotateY(r.rot);
+          texture(imgRoof); // re-using roof texture for rocks
+          sphere(r.s, 16, 12);
+          pop();
+        }
+      }
+
+      // Draw the flying UFO
+      function drawUFO() {
+        let t = frameCount * 0.02;
+        let radius = 260;
+
+        // Circular path
+        let ux = cos(t) * radius;
+        let uz = sin(t) * radius;
+        let uy = GROUND_Y - 230 + sin(t * 2.0) * 15; // Hovering effect
+
+        // UFO light source
+        pointLight(60, 90, 140, ux, uy, uz);
+
+        push();
+        translate(ux, uy, uz);
+        rotateY(-t);
+
+        // Main saucer
+        ambientMaterial(180);
+        ellipsoid(60, 14, 60, 28, 12);
+
+        // Glass dome
+        ambientMaterial(80, 200, 210);
+        translate(0, -18, 0);
+        sphere(22, 18, 12);
+
+        // Top light blinking
+        let blink = sin(frameCount * 0.12) > 0.3;
+        if (blink) emissiveMaterial(255, 80, 80);
+        else emissiveMaterial(40, 10, 10);
+        translate(0, -20, 0);
+        sphere(6, 12, 10);
+
+        pop();
+      }
+
+      // Handle physics and inputs
+      function updateRobot() {
+        // Turning controls
+        if (keyIsDown(LEFT_ARROW)) robot.heading += 0.05;
+        if (keyIsDown(RIGHT_ARROW)) robot.heading -= 0.05;
+
+        // Movement controls
+        let move = 0;
+        if (keyIsDown(UP_ARROW)) move += 1;
+        if (keyIsDown(DOWN_ARROW)) move -= 1;
+
+        if (move !== 0) {
+          let speed = 3.0;
+          robot.x += sin(robot.heading) * speed * move;
+          robot.z += cos(robot.heading) * speed * move;
+
+          // Animate legs only when moving
+          robot.walkPhase += 0.22 * move;
+        }
+
+        // Keep robot inside the yard
+        robot.x = constrain(robot.x, -WORLD_HALF, WORLD_HALF);
+        robot.z = constrain(robot.z, -WORLD_HALF, WORLD_HALF);
+
+        // Gravity logic
+        robot.yVel += GRAVITY;
+        robot.y += robot.yVel;
+
+        // Ground collision
+        if (robot.y > GROUND_Y) {
+          robot.y = GROUND_Y;
+          robot.yVel = 0;
+        }
+      }
+
+      // Draw the robot body parts
+      function drawRobot() {
+        push();
+        translate(robot.x, robot.y, robot.z);
+        rotateY(robot.heading);
+
+        // Leg swing animation
+        let a = sin(robot.walkPhase) * 0.7;
+
+        // Legs
+        push();
+        texture(imgDoor);
+
+        // Left Leg
+        push();
+        translate(-14, -20, 0);
+        rotateX(a);
+        box(16, 50, 16);
+        pop();
+
+        // Right Leg
+        push();
+        translate(14, -20, 0);
+        rotateX(-a);
+        box(16, 50, 16);
+        pop();
+        pop();
+
+        // Body
+        push();
+        translate(0, -70, 0);
+        texture(imgWalls);
+        box(55, 70, 35);
+        pop();
+
+        // Arms
+        push();
+        texture(imgRoof);
+
+        // Left Arm
+        push();
+        translate(-40, -75, 0);
+        rotateX(-a);
+        box(16, 48, 16);
+        pop();
+
+        // Right Arm
+        push();
+        translate(40, -75, 0);
+        rotateX(a);
+        box(16, 48, 16);
+        pop();
+        pop();
+
+        // Head
+        push();
+        translate(0, -120, 0);
+        texture(imgDoor);
+        sphere(26, 20, 16);
+        pop();
+
+        pop();
+      }
+
+      // Input handling
+      function keyPressed() {
+        // Jump
+        if (key === "j" || key === "J") {
+          // Can only jump if on the ground
+          if (abs(robot.y - GROUND_Y) < 0.001) {
+            robot.yVel = -14;
+          }
+        }
+
+        // Toggle door
+        if (key === "o" || key === "O") {
+          doorOpenTarget = doorOpenTarget < 0.5 ? 1 : 0;
+        }
+
+        // Toggle flashlight
+        if (key === "f" || key === "F") {
+          flashlightOn = !flashlightOn;
+        }
+
+        // Reset position
+        if (key === "r" || key === "R") {
+          robot.x = -150;
+          robot.z = 100;
+          robot.heading = 0;
+          robot.y = GROUND_Y;
+          robot.yVel = 0;
+          robot.walkPhase = 0;
+        }
+      }
+    </script>
+  </body>
+</html>

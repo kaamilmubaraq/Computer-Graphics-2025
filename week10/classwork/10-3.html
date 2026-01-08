@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <script src="../../p5.js"></script>
+  </head>
+  <body>
+    <script>
+
+        // 読み込んだシェーダを保持する変数
+        let myShader;
+
+        function preload() {
+            // 頂点シェーダとフラグメントシェーダを読み込む
+            myShader = loadShader('sample3.vert', 'sample3.frag');
+        }
+
+        function setup() {
+            createCanvas(400, 400, WEBGL);
+            noStroke();
+        }
+
+        function draw() {
+            background(0);
+            orbitControl();
+
+            // シェーダを有効化
+            shader(myShader);
+
+            // 図形を描画（このときシェーダが適用される）
+            sphere(150);
+        }
+    </script>
+  </body>
+</html>
